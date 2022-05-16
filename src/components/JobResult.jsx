@@ -1,37 +1,40 @@
-import React from 'react'
-import { Row, Col } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import { Star, StarFill } from 'react-bootstrap-icons'
+import React from "react";
+import { Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { Star, StarFill } from "react-bootstrap-icons";
 import {
   addToFavourites,
   removeFromFavourites,
-} from '../slices/favourites/favouritesSlice'
-import { connect } from 'react-redux'
+} from "../slices/favourites/favouritesSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-const mapStateToProps = (state) => state
+// const mapStateToProps = (state) => state;
 
-const mapDispatchToProps = (dispatch) => ({
-  addToFavourites: (company) => dispatch(addToFavourites(company)),
-  removeFromFavourites: (company) => dispatch(removeFromFavourites(company)),
-})
+// const mapDispatchToProps = (dispatch) => ({
+//   addToFavourites: (company) => dispatch(addToFavourites(company)),
+//   removeFromFavourites: (company) => dispatch(removeFromFavourites(company)),
+// });
 
 const JobResult = ({
   data,
-  favourites,
-  addToFavourites,
-  removeFromFavourites,
+  // favourites,
+  // addToFavourites,
+  // removeFromFavourites,
 }) => {
-  const isFav = favourites.list.includes(data.company_name)
+  const favourites = useSelector((state) => state.favourites);
+  const dispatch = useDispatch();
+
+  const isFav = favourites.list.includes(data.company_name);
   const toggleFavourite = () => {
     isFav
-      ? removeFromFavourites(data.company_name)
-      : addToFavourites(data.company_name)
-  }
+      ? dispatch(removeFromFavourites(data.company_name))
+      : dispatch(addToFavourites(data.company_name));
+  };
 
   return (
     <Row
       className="mx-0 mt-3 p-3"
-      style={{ border: '1px solid #00000033', borderRadius: 4 }}
+      style={{ border: "1px solid #00000033", borderRadius: 4 }}
     >
       <Col xs={3} className="d-flex">
         {isFav ? (
@@ -57,7 +60,7 @@ const JobResult = ({
         </a>
       </Col>
     </Row>
-  )
-}
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(JobResult)
+export default JobResult;
